@@ -1,4 +1,4 @@
-package com.rajnish.service;
+package com.mini.service;
 
 import java.util.List;
 import java.util.Optional;
@@ -6,8 +6,10 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.rajnish.model.Contact;
-import com.rajnish.repository.ContactRepository;
+import com.mini.model.Contact;
+import com.mini.repository.ContactRepository;
+
+import io.swagger.models.Response;
 
 @Service
 public class ContactServiceImple implements ContactService {
@@ -15,8 +17,8 @@ public class ContactServiceImple implements ContactService {
 	@Autowired
 	private ContactRepository repo;
 
-	public String save(Contact contact) {
-		
+	public String saveContact(Contact contact) {
+		contact.setActiveSw("Y");
 		 contact = repo.save(contact);
 		 if(contact.getContactId()!=null) {
 			 return "recored submited sucessfully";
@@ -28,7 +30,7 @@ public class ContactServiceImple implements ContactService {
 	}
 	public List<Contact> show() {
 		
-		return repo.findAll();
+		return repo.findByActiveSw("Y");
 	}
 
 	public Contact getContactById(Integer contactId) {
@@ -40,7 +42,7 @@ public class ContactServiceImple implements ContactService {
 	}
 
 	
-	public String update(Contact contact){
+	public String updateContact(Contact contact){
 		if(repo.existsById(contact.getContactId())) {
 			repo.save(contact);
 			return "record update";
@@ -51,9 +53,19 @@ public class ContactServiceImple implements ContactService {
 	}
 
 	
-	public String delete(Integer contactId) {
-		if(repo.existsById(contactId)) {
+	public String deleteContact(Integer contactId) {
+		/*if(repo.existsById(contactId)) {
 			repo.deleteById(contactId);
+			return "record delete sucessfully";
+		}
+		else {
+			return "record unsucessfully";
+		}*/
+		Optional<Contact> findById = repo.findById(contactId);
+		if(findById.isPresent()) {
+			Contact contact = findById.get();
+			contact.setActiveSw("N");
+			repo.save(contact);
 			return "record delete sucessfully";
 		}
 		else {

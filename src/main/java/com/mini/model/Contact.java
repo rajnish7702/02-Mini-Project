@@ -1,4 +1,4 @@
-package com.rajnish.model;
+package com.mini.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,4 +18,5 @@ public class Contact {
 	private String contactName;
 	private String contactEmail;
 	private Long contactNumber;
+	private String activeSw;
 }
